@@ -1,6 +1,7 @@
 import { AnimatedThemeToggler } from "@/components/magicui/animated-theme-toggler";
 import HeaderMenu from "./header-menu";
 import MobileMenu from "./mobile-menu";
+import UserDropdown from "./user-dropdown";
 
 const Header = () => {
     return (
@@ -14,6 +15,7 @@ const Header = () => {
                 </div>
                 <div className="hidden sm:flex">
                     <AnimatedThemeToggler />
+                    <UserDropdown />
                 </div>
                 <div className="sm:hidden">
                     <MobileMenu />

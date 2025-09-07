@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 
+
 const poppins = Poppins({
     subsets: ["latin"],
     weight: ["400", "700"],

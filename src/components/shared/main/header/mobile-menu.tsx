@@ -7,12 +7,13 @@ import {
     SheetFooter,
     SheetHeader,
     SheetTitle,
-    SheetTrigger
+    SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuLinks } from "@/data/main/header";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import UserDropdown from "./user-dropdown";
 
 const MobileMenu = () => {
     const path = usePathname();
@@ -45,8 +46,11 @@ const MobileMenu = () => {
                         </Link>
                     ))}
                 </div>
-                <SheetFooter className="border-t border-t-[#DDDDDD] dark:border-t-[#333333] mt-4">
-                    <AnimatedThemeToggler />
+                <SheetFooter className="border-t border-t-[#DDDDDD] dark:border-t-[#333333] mt-4 flex  items-center justify-between">
+                    <div className="flex w-full items-center justify-between">
+                        <AnimatedThemeToggler />
+                        <UserDropdown />
+                    </div>
                 </SheetFooter>
             </SheetContent>
         </Sheet>
