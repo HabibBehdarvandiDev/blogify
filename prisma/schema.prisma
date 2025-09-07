@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id                String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  userId            String    @db.Char(36)
+  provider          String    @db.VarChar(255)
+  providerAccountId String    @db.VarChar(255)
+  type              String    @db.VarChar(50)
+  refresh_token     String?   @db.Text
+  access_token      String?   @db.Text
+  expires_at        BigInt?
+  token_type        String?   @db.VarChar(50)
+  scope             String?   @db.Text
+  id_token          String?   @db.Text
+  session_state     String?   @db.Text
+  createdAt         DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime? @default(now()) @db.Timestamp(0)
+  users             users     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "accounts_ibfk_1")
+
+  @@unique([provider, providerAccountId], map: "provider")
+  @@index([userId], map: "idx_accounts_userId")
+}
+
+model bloglikes {
+  id        String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  blog_id   String    @db.Char(36)
+  user_id   String    @db.Char(36)
+  createdAt DateTime? @default(now()) @db.Timestamp(0)
+  blogs     blogs     @relation(fields: [blog_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "bloglikes_ibfk_1")
+  users     users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "bloglikes_ibfk_2")
+
+  @@unique([blog_id, user_id], map: "blog_id")
+  @@index([user_id], map: "user_id")
+}
+
+model blogs {
+  id            String      @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  title         String      @unique(map: "title") @db.VarChar(255)
+  summary       String?     @db.TinyText
+  thumbnail_url String      @db.Text
+  content       String      @db.Text
+  author_id     String      @db.Char(36)
+  createdAt     DateTime?   @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime?   @default(now()) @db.Timestamp(0)
+  bloglikes     bloglikes[]
+  users         users       @relation(fields: [author_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "blogs_ibfk_1")
+  blogtags      blogtags[]
+  comments      comments[]
+
+  @@index([author_id], map: "idx_blogs_author")
+}
+
+model blogtags {
+  id      String @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  blog_id String @db.Char(36)
+  tag_id  String @db.Char(36)
+  blogs   blogs  @relation(fields: [blog_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "blogtags_ibfk_1")
+  tags    tags   @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "blogtags_ibfk_2")
+
+  @@unique([blog_id, tag_id], map: "blog_id")
+  @@index([tag_id], map: "tag_id")
+}
+
+model commentlikes {
+  id         String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  comment_id String    @db.Char(36)
+  user_id    String    @db.Char(36)
+  createdAt  DateTime? @default(now()) @db.Timestamp(0)
+  comments   comments  @relation(fields: [comment_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "commentlikes_ibfk_1")
+  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "commentlikes_ibfk_2")
+
+  @@unique([comment_id, user_id], map: "comment_id")
+  @@index([user_id], map: "user_id")
+}
+
+model comments {
+  id             String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  blog_id        String         @db.Char(36)
+  user_id        String         @db.Char(36)
+  parent_id      String?        @db.Char(36)
+  content        String         @db.Text
+  createdAt      DateTime?      @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime?      @default(now()) @db.Timestamp(0)
+  commentlikes   commentlikes[]
+  blogs          blogs          @relation(fields: [blog_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_1")
+  users          users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_2")
+  comments       comments?      @relation("commentsTocomments", fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_3")
+  other_comments comments[]     @relation("commentsTocomments")
+
+  @@index([blog_id], map: "idx_comments_blog")
+  @@index([user_id], map: "idx_comments_user")
+  @@index([parent_id], map: "parent_id")
+}
+
+model role {
+  id          String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name        String     @unique(map: "name") @db.VarChar(50)
+  description String?    @db.TinyText
+  userrole    userrole[]
+}
+
+model tags {
+  id          String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name        String     @unique(map: "name") @db.VarChar(50)
+  description String?    @db.TinyText
+  createdAt   DateTime?  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime?  @default(now()) @db.Timestamp(0)
+  blogtags    blogtags[]
+}
+
+model userrole {
+  id        String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  role_id   String    @db.Char(36)
+  user_id   String    @db.Char(36)
+  createdAt DateTime? @default(now()) @db.Timestamp(0)
+  updatedAt DateTime? @default(now()) @db.Timestamp(0)
+  role      role      @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userrole_ibfk_1")
+  users     users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userrole_ibfk_2")
+
+  @@unique([role_id, user_id], map: "role_id")
+  @@index([user_id], map: "user_id")
+}
+
+model users {
+  id            String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name          String?        @db.VarChar(255)
+  email         String         @unique(map: "email") @db.VarChar(255)
+  password      String?        @db.VarChar(255)
+  emailVerified DateTime?      @db.Timestamp(0)
+  image         String?        @db.Text
+  createdAt     DateTime?      @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime?      @default(now()) @db.Timestamp(0)
+  accounts      accounts[]
+  bloglikes     bloglikes[]
+  blogs         blogs[]
+  commentlikes  commentlikes[]
+  comments      comments[]
+  userrole      userrole[]
+
+  @@index([email], map: "idx_users_email")
+}

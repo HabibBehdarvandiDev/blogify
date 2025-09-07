@@ -3,12 +3,11 @@ import { AnimatedThemeToggler } from "@/components/magicui/animated-theme-toggle
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetFooter,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
+    SheetTrigger
 } from "@/components/ui/sheet";
 import { MenuLinks } from "@/data/main/header";
 import { MenuIcon } from "lucide-react";
@@ -29,7 +28,7 @@ const MobileMenu = () => {
                 className="w-[300px] border-l border-l-[#DDDDDD] dark:border-l-[#333333]"
             >
                 <SheetHeader className="border-b border-b-[#DDDDDD] dark:border-b-[#333333] mb-4 p-4">
-                    <SheetTitle className="font-bold">Blogify</SheetTitle>
+                    <SheetTitle className="font-bold">Blogify.</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col flex-1 px-4 gap-3">
                     {MenuLinks.map((link, idx) => (
