@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import React from "react";
 
-const providers = ({ children }: { children: React.ReactNode }) => {
+const Providers = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <ThemeProvider
@@ -16,4 +16,4 @@ const providers = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-export default providers;
+export default Providers;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -10,7 +11,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
     title: "Blogify | A Blogging Platform",
-    description: "A modern blogging platform built with Next.js and Tailwind CSS.",
+    description:
+        "A modern blogging platform built with Next.js and Tailwind CSS.",
 };
 
 export default function RootLayout({
@@ -23,7 +25,7 @@ export default function RootLayout({
             <body
                 className={`${poppins.className} antialiased transition-all duration-300 ease-in-out`}
             >
-                {children}
+                <Providers>{children}</Providers>
             </body>
         </html>
     );
