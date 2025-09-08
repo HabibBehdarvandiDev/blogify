@@ -9,11 +9,10 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import OauthButtons from "../oauth-buttons";
+import OauthButtons from "../../../../components/shared/auth/oauth-buttons";
 import LoginForm from "./login-form";
 
 export default function LoginPage() {
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
             <Card className="w-full max-w-md">

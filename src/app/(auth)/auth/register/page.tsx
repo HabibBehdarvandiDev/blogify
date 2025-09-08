@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import OauthButtons from "../oauth-buttons";
+import OauthButtons from "../../../../components/shared/auth/oauth-buttons";
 import RegisterForm from "./register-form";
 
 export default function RegisterPage() {
