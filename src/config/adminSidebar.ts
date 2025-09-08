@@ -19,28 +19,34 @@ export const adminSidebarConfig = [
         title: "Manage Blogs",
         icon: FileText,
         children: [
-            { title: "All Blogs", href: "/admin/blogs", icon: List },
-            { title: "Create", href: "/admin/blogs/create", icon: Plus },
+            { title: "All Blogs", href: "/admin/dashboard/blogs", icon: List },
+            {
+                title: "Create",
+                href: "/admin/dashboard/blogs/create",
+                icon: Plus,
+            },
         ],
     },
     {
         title: "Comments",
         icon: MessageSquare,
-        href: "/admin/comments",
+        href: "/admin/dashboard/comments",
     },
     {
         title: "Manage Tags",
         icon: Tags,
-        href: "/tags",
+        href: "/admin/dashboard/tags",
     },
     {
         title: "Manage Users",
         icon: Users,
-        children: [{ title: "All Users", href: "/users", icon: List }],
+        children: [
+            { title: "All Users", href: "/admin/dashboard/users", icon: List },
+        ],
     },
     {
         title: "Analytics",
         icon: BarChart,
-        href: "/analytics",
+        href: "/admin/dashboard/analytics",
     },
 ];
