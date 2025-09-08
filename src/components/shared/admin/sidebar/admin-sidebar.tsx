@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
     BarChart,
+    BoldIcon,
     ChevronRight,
     FileText,
     LayoutDashboard,
@@ -29,27 +30,21 @@ import {
     Tags,
     Users,
 } from "lucide-react";
-import { getServerSession } from "next-auth";
+
 import Link from "next/link";
-import { redirect } from "next/navigation";
+
 const AdminSidebar = async () => {
-    const session = await getServerSession(authOptions);
-
-    if (!session) {
-        redirect("/auth/login");
-    }
-
     return (
         <Sidebar>
             <SidebarHeader className="p-4 text-lg">
                 <div className="flex items-center gap-2">
-                    <Avatar>
-                        <AvatarImage src={`${session.user?.image}`} />
-                    </Avatar>
+                    <div className="rounded-sm bg-primary/10 p-2">
+                        <BoldIcon className="w-7 h-7" />
+                    </div>
                     <div className="flex flex-col items-start justify-center">
-                        <h5 className="text-sm">{session.user?.name}</h5>
-                        <p className="text-xs truncate w-32">
-                            {session.user?.email}
+                        <h5 className="text-lg font-bold">Blogify.</h5>
+                        <p className="text-xs truncate w-34">
+                            My own blog platform
                         </p>
                     </div>
                 </div>
@@ -61,7 +56,7 @@ const AdminSidebar = async () => {
                         {/* Dashboard */}
                         <SidebarMenuItem>
                             <SidebarMenuButton asChild>
-                                <Link href="/dashboard">
+                                <Link href="/admin">
                                     <LayoutDashboard className="mr-2 size-4" />
                                     Dashboard
                                 </Link>
