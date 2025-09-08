@@ -8,11 +8,11 @@ Admins can manage content, while normal users can explore, read, and interact wi
 
 ## Features
 
-* User authentication via **NextAuth.js** (Google, GitHub, Email)
-* Role-based access control (`admin` and `user`)
-* Full blog management with **Prisma** + MySQL
-* Responsive UI using **TailwindCSS** + ShadCN/UI components
-* Optimized for performance, SEO, and user experience
+-   User authentication via **NextAuth.js** (Google, GitHub, Email)
+-   Role-based access control (`admin` and `user`)
+-   Full blog management with **Prisma** + MySQL
+-   Responsive UI using **TailwindCSS** + ShadCN/UI components
+-   Optimized for performance, SEO, and user experience
 
 ---
 
@@ -35,20 +35,20 @@ GITHUB_SECRET="your_github_client_secret"
 
 **How to get OAuth credentials:**
 
-* **Google:**
+-   **Google:**
 
-  1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-  2. Create a new project or select existing
-  3. Navigate to **APIs & Services → Credentials → Create Credentials → OAuth Client ID**
-  4. Set **Authorized redirect URIs** to `http://localhost:3000/api/auth/callback/google`
-  5. Copy `Client ID` and `Client Secret` into your `.env` file
+    1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+    2. Create a new project or select existing
+    3. Navigate to **APIs & Services → Credentials → Create Credentials → OAuth Client ID**
+    4. Set **Authorized redirect URIs** to `http://localhost:3000/api/auth/callback/google`
+    5. Copy `Client ID` and `Client Secret` into your `.env` file
 
-* **GitHub:**
+-   **GitHub:**
 
-  1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
-  2. Create a new OAuth App
-  3. Set **Authorization callback URL** to `http://localhost:3000/api/auth/callback/github`
-  4. Copy `Client ID` and `Client Secret` into your `.env` file
+    1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+    2. Create a new OAuth App
+    3. Set **Authorization callback URL** to `http://localhost:3000/api/auth/callback/github`
+    4. Copy `Client ID` and `Client Secret` into your `.env` file
 
 ---
 
@@ -64,19 +64,19 @@ yarn install
 
 ### 3. Setup Prisma & Database
 
-* Push Prisma schema to your database:
+-   Push Prisma schema to your database:
 
 ```bash
 npx prisma db push
 ```
 
-* Generate Prisma client:
+-   Generate Prisma client:
 
 ```bash
 npx prisma generate
 ```
 
-* Optionally, open Prisma Studio to inspect DB:
+-   Optionally, open Prisma Studio to inspect DB:
 
 ```bash
 npx prisma studio
@@ -120,29 +120,29 @@ INSERT INTO userroles (user_id, role_id) VALUES (<YOUR_USER_ID>, <ADMIN_ROLE_ID>
 
 ### 6. Notes & Best Practices
 
-* Ensure `.env` is **never committed** to version control.
-* Adjust `DATABASE_URL` for production deployment.
-* Admin routes are protected via middleware (`/admin*`) requiring `admin` role.
-* OAuth redirect URLs must match exactly what you set in Google/GitHub console.
-* Blogify automatically handles user roles, blog CRUD, and content rendering using ShadCN/UI components and TailwindCSS.
+-   Ensure `.env` is **never committed** to version control.
+-   Adjust `DATABASE_URL` for production deployment.
+-   Admin routes are protected via middleware (`/admin*`) requiring `admin` role.
+-   OAuth redirect URLs must match exactly what you set in Google/GitHub console.
+-   Blogify automatically handles user roles, blog CRUD, and content rendering using ShadCN/UI components and TailwindCSS.
 
 ---
 
 ### 7. Recommended Next Steps
 
-* Implement additional social logins if needed
-* Add blog categories and tagging system
-* Enable SSR caching for performance and SEO
-* Add Prisma seed script to automatically create `admin` role and first admin user
+-   Implement additional social logins if needed
+-   Add blog categories and tagging system
+-   Enable SSR caching for performance and SEO
+-   Add Prisma seed script to automatically create `admin` role and first admin user
 
 ---
 
 ### 8. Credits
 
-* **Author:** Habib
-* **Created:** 2025
-* **Contact:** [hello@anikocompany.ir](mailto:hello@anikocompany.ir)
-* **Project:** Blogify - Full-featured blogging platform with role-based access
+-   **Author:** Habib.Dev
+-   **Created:** 2025
+-   **Contact:** [habibbehdarvandi.dev@gmail.com](mailto:habibbehdarvandi.dev@gmail.com)
+-   **Project:** Blogify - Full-featured blogging platform with role-based access
 
 ---
 
