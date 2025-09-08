@@ -27,17 +27,17 @@ export const adminSidebarConfig = [
             },
         ],
     },
-    {
+    /* {
         title: "Comments",
         icon: MessageSquare,
         href: "/admin/dashboard/comments",
-    },
+    }, */
     {
         title: "Manage Tags",
         icon: Tags,
         href: "/admin/dashboard/tags",
     },
-    {
+    /* {
         title: "Manage Users",
         icon: Users,
         children: [
@@ -48,5 +48,5 @@ export const adminSidebarConfig = [
         title: "Analytics",
         icon: BarChart,
         href: "/admin/dashboard/analytics",
-    },
+    }, */
 ];

@@ -27,6 +27,12 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import MultiSelectTags from "./multi-select-tags";
 import { toast } from "sonner";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import Highlight from "@tiptap/extension-highlight";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 
 type BlogFormValues = z.infer<typeof BlogFormSchema>;
 
@@ -46,31 +52,45 @@ const CreateBlogForm = ({ tags }: { tags: tags[] }) => {
             tags: [],
         },
     });
-    console.log(session?.user.id);
+
+    // TipTap editor
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Image,
+            Highlight,
+            Link,
+            TextAlign.configure({ types: ["heading", "paragraph"] }),
+        ],
+        content: form.getValues("content"),
+        onUpdate({ editor }) {
+            form.setValue("content", editor.getHTML());
+        },
+        editorProps: {
+            attributes: {
+                class: "prose max-w-full focus:outline-none p-2 min-h-[150px] rounded-md",
+            },
+        },
+        immediatelyRender: false,
+    });
 
     async function onSubmit(values: BlogFormValues) {
         try {
-            // ✅ Merge author_id from session
             const payload = {
                 ...values,
                 author_id: session?.user?.id,
             };
 
-            const res = await axios.post("/api/blogs", payload);
+            await axios.post("/api/blogs", payload);
 
-            // ✅ Success toast
             toast.success("Your blog has been created successfully!");
             form.reset();
-
-            // redirect to /admin/dashboard/blogs
             window.location.href = "/admin/dashboard/blogs";
         } catch (error: any) {
             console.error(
                 "❌ Failed to create blog:",
                 error.response?.data || error.message
             );
-
-            // ✅ Error toast
             toast.error("Failed to create blog. Check console for details.");
         }
     }
@@ -121,22 +141,26 @@ const CreateBlogForm = ({ tags }: { tags: tags[] }) => {
                 <FormField
                     control={form.control}
                     name="content"
-                    render={({ field }) => (
+                    render={() => (
                         <FormItem>
                             <FormLabel>Content</FormLabel>
                             <FormControl>
-                                <Textarea
-                                    placeholder="Full blog content"
-                                    className="min-h-[150px]"
-                                    {...field}
-                                />
+                                <div className="space-y-2">
+                                    <MenuBar editor={editor} />
+                                    <div className="border rounded-md min-h-[150px]">
+                                        <EditorContent
+                                            editor={editor}
+                                            className="p-2"
+                                        />
+                                    </div>
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
 
-                {/* Thumbnail URL */}
+                {/* Thumbnail */}
                 <FormField
                     control={form.control}
                     name="thumbnail_url"
@@ -146,12 +170,12 @@ const CreateBlogForm = ({ tags }: { tags: tags[] }) => {
                             <FormControl>
                                 <Input
                                     placeholder="https://example.com/image.jpg"
-                                    value={field.value ?? ""} // show empty string in UI
+                                    value={field.value ?? ""}
                                     onChange={(e) =>
                                         field.onChange(
                                             e.target.value || undefined
                                         )
-                                    } // send undefined if empty
+                                    }
                                 />
                             </FormControl>
                             <FormMessage />
@@ -200,7 +224,7 @@ const CreateBlogForm = ({ tags }: { tags: tags[] }) => {
                                         label: t.name,
                                         value: t.id,
                                     }))}
-                                    value={field.value ?? []} // 👈 fallback to []
+                                    value={field.value ?? []}
                                     onChange={field.onChange}
                                     placeholder="Select one or more tags"
                                 />
@@ -210,7 +234,6 @@ const CreateBlogForm = ({ tags }: { tags: tags[] }) => {
                     )}
                 />
 
-                {/* Submit */}
                 <Button type="submit" className="w-full">
                     Create Blog
                 </Button>
@@ -220,3 +243,65 @@ const CreateBlogForm = ({ tags }: { tags: tags[] }) => {
 };
 
 export default CreateBlogForm;
+
+// Menu Bar Component
+const MenuBar = ({ editor }: { editor: any }) => {
+    if (!editor) return null;
+
+    const btnClass =
+        "px-2 py-1 border rounded-md hover:bg-gray-100 transition-colors";
+
+    const activeClass = "bg-blue-100 text-blue-700 font-bold";
+
+    return (
+        <div className="flex flex-wrap gap-2 mb-2">
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                className={`${btnClass} ${
+                    editor.isActive("bold") ? activeClass : ""
+                }`}
+            >
+                B
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                className={`${btnClass} ${
+                    editor.isActive("italic") ? activeClass : ""
+                }`}
+            >
+                I
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleHighlight().run()}
+                className={btnClass}
+            >
+                Highlight
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    const url = prompt("Enter image URL");
+                    if (url)
+                        editor.chain().focus().setImage({ src: url }).run();
+                }}
+                className={btnClass}
+            >
+                Image
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    const url = prompt("Enter link URL");
+                    if (url)
+                        editor.chain().focus().setLink({ href: url }).run();
+                }}
+                className={btnClass}
+            >
+                Link
+            </button>
+        </div>
+    );
+};

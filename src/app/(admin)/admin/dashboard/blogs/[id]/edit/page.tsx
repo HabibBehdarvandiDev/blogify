@@ -17,7 +17,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
     Select,
     SelectContent,
@@ -25,8 +25,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import MultiSelectTags from "../../create/multi-select-tags";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import Highlight from "@tiptap/extension-highlight";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
     params: { id: string };
@@ -49,7 +55,7 @@ const BlogEditPage = ({ params }: Props) => {
 
     const form = useForm<BlogFormValues>({
         resolver: zodResolver(BlogUpdateSchema),
-        defaultValues: initialData || {
+        defaultValues: {
             title: "",
             summary: "",
             content: "",
@@ -59,12 +65,32 @@ const BlogEditPage = ({ params }: Props) => {
         },
     });
 
+    // Editor
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Image,
+            Highlight,
+            Link,
+            TextAlign.configure({ types: ["heading", "paragraph"] }),
+        ],
+        content: initialData?.content || "",
+        onUpdate({ editor }) {
+            form.setValue("content", editor.getHTML());
+        },
+        editorProps: {
+            attributes: { class: "prose max-w-full focus:outline-none" },
+        },
+        immediatelyRender: false,
+    });
+
     useEffect(() => {
         async function fetchBlog() {
             try {
                 const res = await axios.get(`/api/blogs/${id}`);
                 setInitialData(res.data);
                 form.reset(res.data); // populate form with fetched data
+                editor?.commands.setContent(res.data.content || ""); // set editor content
             } catch (err: any) {
                 toast.error("Failed to load blog data.");
                 console.error(err);
@@ -73,7 +99,7 @@ const BlogEditPage = ({ params }: Props) => {
             }
         }
         fetchBlog();
-    }, [id]);
+    }, [id, editor]);
 
     async function onSubmit(values: BlogFormValues) {
         try {
@@ -128,15 +154,19 @@ const BlogEditPage = ({ params }: Props) => {
                 <FormField
                     control={form.control}
                     name="content"
-                    render={({ field }) => (
+                    render={() => (
                         <FormItem>
                             <FormLabel>Content</FormLabel>
                             <FormControl>
-                                <Textarea
-                                    placeholder="Full blog content"
-                                    className="min-h-[150px]"
-                                    {...field}
-                                />
+                                <div className="space-y-2">
+                                    <MenuBar editor={editor} />
+                                    <div className="border rounded-md min-h-[150px]">
+                                        <EditorContent
+                                            editor={editor}
+                                            className="p-2"
+                                        />
+                                    </div>
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -194,7 +224,7 @@ const BlogEditPage = ({ params }: Props) => {
                     )}
                 />
 
-                {/* Tags with MultiSelectTags */}
+                {/* Tags */}
                 <FormField
                     control={form.control}
                     name="tags"
@@ -207,7 +237,7 @@ const BlogEditPage = ({ params }: Props) => {
                                         label: t.name,
                                         value: t.id,
                                     }))}
-                                    value={field.value ?? []} // fallback to []
+                                    value={field.value ?? []}
                                     onChange={field.onChange}
                                     placeholder="Select one or more tags"
                                 />
@@ -227,3 +257,57 @@ const BlogEditPage = ({ params }: Props) => {
 };
 
 export default BlogEditPage;
+
+// MenuBar component
+const MenuBar = ({ editor }: { editor: any }) => {
+    if (!editor) return null;
+
+    return (
+        <div className="flex gap-2 mb-2">
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                className={
+                    editor.isActive("bold") ? "font-bold text-blue-500" : ""
+                }
+            >
+                B
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                className={
+                    editor.isActive("italic") ? "italic text-blue-500" : ""
+                }
+            >
+                I
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleHighlight().run()}
+            >
+                Highlight
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    const url = prompt("Enter image URL");
+                    if (url)
+                        editor.chain().focus().setImage({ src: url }).run();
+                }}
+            >
+                Image
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    const url = prompt("Enter link URL");
+                    if (url)
+                        editor.chain().focus().setLink({ href: url }).run();
+                }}
+            >
+                Link
+            </button>
+        </div>
+    );
+};
