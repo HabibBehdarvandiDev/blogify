@@ -57,16 +57,12 @@ export const authOptions: NextAuthOptions = {
 
     // 🔧 Callbacks
     callbacks: {
-        async jwt({ token, user }) {
-            // First time login: `user` is defined
+        async jwt({ token, user, account }) {
+            // Runs only on first login
             if (user) {
-                token.id = (user as any).id;
-                token.name = (user as any).name;
-                token.email = (user as any).email;
-
-                // Fetch roles from DB if not already present
+                // 🔑 Find user in DB by email
                 const dbUser = await prisma.users.findUnique({
-                    where: { id: token.id as string },
+                    where: { email: user.email?.toLowerCase() || "" },
                     include: {
                         userrole: {
                             include: { role: true },
@@ -74,14 +70,24 @@ export const authOptions: NextAuthOptions = {
                     },
                 });
 
-                token.roles = dbUser?.userrole.map((ur) => ur.role.name) || [];
+                if (dbUser) {
+                    token.id = dbUser.id; // ✅ always DB user id
+                    token.name = dbUser.name;
+                    token.email = dbUser.email;
+                    token.roles =
+                        dbUser.userrole.map((ur) => ur.role.name) || [];
+                }
             }
 
             return token;
         },
+
         async session({ session, token }) {
-            if (token) {
-                (session.user as any).id = token.id;
+            if (session.user) {
+                session.user.id = token.id as string; // ✅ DB user id
+                session.user.name = token.name;
+                session.user.email = token.email;
+                (session.user as any).roles = token.roles || [];
             }
             return session;
         },

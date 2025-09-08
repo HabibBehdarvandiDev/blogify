@@ -7,13 +7,13 @@ import {
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
-import { mockBlogs } from "@/config/blogConfig";
 import { useBlogFilters } from "@/hooks/use-blog-filters";
+import { Blog } from "@/types/admin/blogs";
 import { FilterIcon, PlusIcon } from "lucide-react";
 import BlogPagination from "./blog-pagination";
 import BlogTable from "./blog-table";
 
-const BlogManagement = ({ blogs }) => {
+const BlogManagement = ({ blogs }: { blogs: Blog[] }) => {
     const {
         search,
         setSearch,

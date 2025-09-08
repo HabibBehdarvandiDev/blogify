@@ -6,7 +6,7 @@ import { AnimatedThemeToggler } from "@/components/magicui/animated-theme-toggle
 
 const AdminHeader = () => {
     return (
-        <header className="w-full min-h-16 border-b border-b-[#DDDDDD] dark:border-b-[#333333] flex items-center px-4">
+        <header className="w-full min-h-16 border-b border-b-[#DDDDDD] dark:border-b-[#333333] flex items-center px-4 bg-card">
             <div className="w-full flex items-center justify-between align-middle ">
                 <div className="flex items-center gap-4">
                     <SidebarTrigger />

@@ -3,9 +3,6 @@ import BlogManagement from "./blog-management";
 
 const DashboardBlogsPage = async () => {
     const blogs = await prisma.blogs.findMany({
-        where: {
-            status: "published",
-        },
         select: {
             id: true,
             title: true,
