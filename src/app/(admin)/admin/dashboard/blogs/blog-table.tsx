@@ -84,9 +84,9 @@ const BlogTable = ({ currentBlogs, filteredCount, setBlogs }: Props) => {
 
                             <TableCell>
                                 {blog.status === "published" ? (
-                                    <Badge variant="outline">Published</Badge>
+                                    <Badge variant="outline" className="bg-green-600/15 text-green-600 border-green-600/25">Published</Badge>
                                 ) : (
-                                    <Badge>Draft</Badge>
+                                    <Badge className="bg-yellow-600/15 text-yellow-600 border-yellow-600/25">Draft</Badge>
                                 )}
                             </TableCell>
 
@@ -115,12 +115,26 @@ const BlogTable = ({ currentBlogs, filteredCount, setBlogs }: Props) => {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
-                                        <DropdownMenuItem className="flex items-center gap-2">
-                                            <EyeIcon className="w-4 h-4" /> View
+                                        <DropdownMenuItem>
+                                            <Link
+                                                className="flex items-center gap-2"
+                                                href={`/blogs/${blog.id}`}
+                                            >
+                                                <EyeIcon className="w-4 h-4" />{" "}
+                                                View
+                                            </Link>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="flex items-center gap-2">
-                                            <PencilIcon className="w-4 h-4" />{" "}
-                                            Edit
+                                        <DropdownMenuItem
+                                            className="flex items-center gap-2"
+                                            asChild
+                                        >
+                                            <Link
+                                                className="flex items-center gap-2"
+                                                href={`/admin/dashboard/blogs/${blog.id}/edit`}
+                                            >
+                                                <PencilIcon className="w-4 h-4" />{" "}
+                                                Edit
+                                            </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="flex items-center gap-2 text-destructive"
