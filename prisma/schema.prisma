@@ -41,16 +41,18 @@ model bloglikes {
 }
 
 model blogs {
-  id            String      @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  title         String      @unique(map: "title") @db.VarChar(255)
-  summary       String?     @db.TinyText
-  thumbnail_url String      @db.Text
-  content       String      @db.Text
-  author_id     String      @db.Char(36)
-  createdAt     DateTime?   @default(now()) @db.Timestamp(0)
-  updatedAt     DateTime?   @default(now()) @db.Timestamp(0)
+  id            String        @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  title         String        @unique(map: "title") @db.VarChar(255)
+  summary       String?       @db.TinyText
+  thumbnail_url String        @db.Text
+  content       String        @db.Text
+  status        blogs_status? @default(draft)
+  author_id     String        @db.Char(36)
+  likes_count   Int?          @default(0)
+  createdAt     DateTime?     @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime?     @default(now()) @db.Timestamp(0)
   bloglikes     bloglikes[]
-  users         users       @relation(fields: [author_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "blogs_ibfk_1")
+  users         users         @relation(fields: [author_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "blogs_ibfk_1")
   blogtags      blogtags[]
   comments      comments[]
 
@@ -145,4 +147,9 @@ model users {
   userrole      userrole[]
 
   @@index([email], map: "idx_users_email")
+}
+
+enum blogs_status {
+  published
+  draft
 }

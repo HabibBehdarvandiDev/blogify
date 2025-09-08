@@ -18,6 +18,7 @@ import {
     SidebarMenuSubItem,
     SidebarRail,
 } from "@/components/ui/sidebar";
+import { adminSidebarConfig } from "@/config/adminSidebar";
 import {
     BarChart,
     BoldIcon,
@@ -32,8 +33,6 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-
-
 
 const AdminSidebar = async () => {
     return (
@@ -55,101 +54,57 @@ const AdminSidebar = async () => {
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarMenu>
-                        {/* Dashboard */}
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/admin">
-                                    <LayoutDashboard className="mr-2 size-4" />
-                                    Dashboard
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-
-                        {/* Blogs with submenu */}
-                        <Collapsible defaultOpen>
-                            <SidebarMenuItem>
-                                <CollapsibleTrigger asChild>
-                                    <SidebarMenuButton>
-                                        <FileText className="mr-2 size-4" />
-                                        Manage Blogs
-                                        <ChevronRight className="ml-auto size-4 data-[state=open]:rotate-90" />
+                        {adminSidebarConfig.map((item, idx) =>
+                            item.children ? (
+                                <Collapsible
+                                    key={idx}
+                                    defaultOpen={item.title === "Manage Blogs"}
+                                >
+                                    <SidebarMenuItem>
+                                        <CollapsibleTrigger asChild>
+                                            <SidebarMenuButton>
+                                                <item.icon className="mr-2 size-4" />
+                                                {item.title}
+                                                <ChevronRight className="ml-auto size-4 data-[state=open]:rotate-90" />
+                                            </SidebarMenuButton>
+                                        </CollapsibleTrigger>
+                                        <CollapsibleContent>
+                                            <SidebarMenuSub>
+                                                {item.children.map(
+                                                    (sub, subIdx) => (
+                                                        <SidebarMenuSubItem
+                                                            key={subIdx}
+                                                        >
+                                                            <SidebarMenuSubButton
+                                                                asChild
+                                                            >
+                                                                <Link
+                                                                    href={
+                                                                        sub.href
+                                                                    }
+                                                                >
+                                                                    <sub.icon className="mr-2 size-4" />
+                                                                    {sub.title}
+                                                                </Link>
+                                                            </SidebarMenuSubButton>
+                                                        </SidebarMenuSubItem>
+                                                    )
+                                                )}
+                                            </SidebarMenuSub>
+                                        </CollapsibleContent>
+                                    </SidebarMenuItem>
+                                </Collapsible>
+                            ) : (
+                                <SidebarMenuItem key={idx}>
+                                    <SidebarMenuButton asChild>
+                                        <Link href={item.href}>
+                                            <item.icon className="mr-2 size-4" />
+                                            {item.title}
+                                        </Link>
                                     </SidebarMenuButton>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                    <SidebarMenuSub>
-                                        <SidebarMenuSubItem>
-                                            <SidebarMenuSubButton asChild>
-                                                <Link href="/blogs">
-                                                    <List className="mr-2 size-4" />{" "}
-                                                    All Blogs
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                        <SidebarMenuSubItem>
-                                            <SidebarMenuSubButton asChild>
-                                                <Link href="/blogs/create">
-                                                    <Plus className="mr-2 size-4" />{" "}
-                                                    Create
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                        <SidebarMenuSubItem>
-                                            <SidebarMenuSubButton asChild>
-                                                <Link href="/blogs/comments">
-                                                    <MessageSquare className="mr-2 size-4" />{" "}
-                                                    Comments
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    </SidebarMenuSub>
-                                </CollapsibleContent>
-                            </SidebarMenuItem>
-                        </Collapsible>
-
-                        {/* Tags */}
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/tags">
-                                    <Tags className="mr-2 size-4" />
-                                    Manage Tags
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-
-                        {/* Users with submenu */}
-                        <Collapsible>
-                            <SidebarMenuItem>
-                                <CollapsibleTrigger asChild>
-                                    <SidebarMenuButton>
-                                        <Users className="mr-2 size-4" />
-                                        Manage Users
-                                        <ChevronRight className="ml-auto size-4 data-[state=open]:rotate-90" />
-                                    </SidebarMenuButton>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                    <SidebarMenuSub>
-                                        <SidebarMenuSubItem>
-                                            <SidebarMenuSubButton asChild>
-                                                <Link href="/users">
-                                                    <List className="mr-2 size-4" />{" "}
-                                                    All Users
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    </SidebarMenuSub>
-                                </CollapsibleContent>
-                            </SidebarMenuItem>
-                        </Collapsible>
-
-                        {/* Analytics */}
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/analytics">
-                                    <BarChart className="mr-2 size-4" />
-                                    Analytics
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
+                                </SidebarMenuItem>
+                            )
+                        )}
                     </SidebarMenu>
                 </SidebarGroup>
             </SidebarContent>
