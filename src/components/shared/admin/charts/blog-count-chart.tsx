@@ -18,6 +18,7 @@ import {
     ChartConfig,
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import BlogLikesChartSkeleton from "../../skeletons/blog-likes-chart-skeleton";
 
 type BlogCount = {
     date: string;
@@ -46,7 +47,7 @@ export const BlogCountChart = () => {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading chart...</p>;
+    if (loading) return <BlogLikesChartSkeleton />;
 
     return (
         <Card className="pt-0">

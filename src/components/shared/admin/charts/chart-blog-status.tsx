@@ -22,6 +22,7 @@ import {
     ChartContainer,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import ChartBlogStatusSkeleton from "../../skeletons/chart-blog-status-skeleton";
 
 type BlogStatusData = {
     status: string;
@@ -55,7 +56,7 @@ export const ChartBlogStatus = () => {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading chart...</p>;
+    if (loading) return <ChartBlogStatusSkeleton />;
 
     return (
         <Card className="pt-0">

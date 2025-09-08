@@ -26,6 +26,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import BlogLikesChartSkeleton from "../../skeletons/blog-likes-chart-skeleton";
 
 type AuthorData = {
     author_name: string;
@@ -55,7 +56,7 @@ export function BlogsPerAuthorChart() {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading chart...</p>;
+    if (loading) return <BlogLikesChartSkeleton />;
 
     return (
         <Card>

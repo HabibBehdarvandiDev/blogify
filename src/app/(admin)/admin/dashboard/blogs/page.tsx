@@ -1,5 +1,7 @@
 import prisma from "@/lib/db";
 import BlogManagement from "./blog-management";
+import { Suspense } from "react";
+import DashboardBlogsSkeleton from "@/components/shared/skeletons/dashboard-blogs-skeleton";
 
 const DashboardBlogsPage = async () => {
     const blogs = await prisma.blogs.findMany({
@@ -26,7 +28,9 @@ const DashboardBlogsPage = async () => {
 
     return (
         <div className="flex flex-col w-full">
-            <BlogManagement blogs={result} />
+            <Suspense fallback={<DashboardBlogsSkeleton />}>
+                <BlogManagement blogs={result} />
+            </Suspense>
         </div>
     );
 };

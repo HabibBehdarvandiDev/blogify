@@ -59,6 +59,7 @@ const OauthButtons = () => {
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png"
                         }
                         alt="google logo"
+                        className="dark:invert"
                         width={25}
                         height={25}
                     />

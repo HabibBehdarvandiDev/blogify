@@ -12,7 +12,7 @@ import {
     ChartContainer,
     ChartLegend,
     ChartLegendContent,
-    ChartTooltipContent
+    ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
 import {
@@ -24,6 +24,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import BlogPublishedChartSkeleton from "../../skeletons/blog-published-chart-skeleton";
 
 type TagData = {
     tag_name: string;
@@ -53,7 +54,7 @@ export function BlogsPerTagChart() {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading chart...</p>;
+    if (loading) return <BlogPublishedChartSkeleton />;
 
     return (
         <Card>
@@ -73,7 +74,11 @@ export function BlogsPerTagChart() {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="tag_name" />
                             <YAxis />
-                            <Tooltip content={<ChartTooltipContent indicator="dot" />} />
+                            <Tooltip
+                                content={
+                                    <ChartTooltipContent indicator="dot" />
+                                }
+                            />
                             <ChartLegend content={<ChartLegendContent />} />
                             <Bar dataKey="count" fill="var(--chart-1)" />
                         </BarChart>

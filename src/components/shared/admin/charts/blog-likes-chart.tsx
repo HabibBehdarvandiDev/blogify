@@ -18,6 +18,7 @@ import {
     ChartConfig,
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, CartesianGrid } from "recharts";
+import BlogLikesChartSkeleton from "../../skeletons/blog-likes-chart-skeleton";
 
 type BlogLike = {
     title: string;
@@ -46,7 +47,7 @@ export const BlogLikesChart = () => {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading chart...</p>;
+    if (loading) return <BlogLikesChartSkeleton />;
 
     return (
         <Card className="pt-0">

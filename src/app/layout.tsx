@@ -25,7 +25,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${poppins.className} antialiased transition-all duration-300 ease-in-out`}
+                className={`${poppins.className} antialiased transition-all duration-300 ease-in-out overflow-x-hidden`}
             >
                 <Providers>
                     {children}

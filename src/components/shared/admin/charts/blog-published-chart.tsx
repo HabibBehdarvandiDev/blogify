@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { toast } from "sonner";
+import BlogPublishedChartSkeleton from "../../skeletons/blog-published-chart-skeleton";
 
 type BlogCountByDate = {
     date: string; // YYYY-MM-DD
@@ -81,7 +82,7 @@ const BlogPublishedChart = () => {
         return data.filter((item) => new Date(item.date) >= startDate);
     }, [data, timeRange]);
 
-    if (loading) return <p>Loading chart...</p>;
+    if (loading) return <BlogPublishedChartSkeleton />;
 
     return (
         <Card className="pt-0">

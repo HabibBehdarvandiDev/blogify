@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ThemeProvider } from "@/components/theme-provider";
 import React from "react";
 import { SessionProvider } from "next-auth/react";
@@ -8,7 +8,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <>
             <ThemeProvider
                 attribute="class"
-                defaultTheme="light"
+                defaultTheme="dark"
                 enableSystem
                 disableTransitionOnChange
             >
