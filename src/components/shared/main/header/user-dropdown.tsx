@@ -12,13 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Trash } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
-
+import Link from "next/link";
 
 const UserDropdown = () => {
     const { data: session } = useSession();
 
     if (!session?.user) {
-        return <ShinyButton>Register</ShinyButton>;
+        return (
+            <Link href="/auth/register">
+                <ShinyButton>Register</ShinyButton>
+            </Link>
+        );
     }
 
     const { name, image, email } = session.user;
@@ -59,7 +63,7 @@ const UserDropdown = () => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem
-                variant="destructive"
+                    variant="destructive"
                     className="cursor-pointer"
                     onClick={() => signOut({ callbackUrl: "/" })}
                 >

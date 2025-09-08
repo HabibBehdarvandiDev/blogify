@@ -13,7 +13,7 @@ const Header = () => {
                 <div className="hidden sm:flex">
                     <HeaderMenu />
                 </div>
-                <div className="hidden sm:flex">
+                <div className="hidden sm:flex gap-2">
                     <AnimatedThemeToggler />
                     <UserDropdown />
                 </div>
