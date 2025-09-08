@@ -12,8 +12,11 @@ import { Blog } from "@/types/admin/blogs";
 import { FilterIcon, PlusIcon } from "lucide-react";
 import BlogPagination from "./blog-pagination";
 import BlogTable from "./blog-table";
+import { useState } from "react";
+import Link from "next/link";
 
 const BlogManagement = ({ blogs }: { blogs: Blog[] }) => {
+    const [allBlogs, setAllBlogs] = useState(blogs);
     const {
         search,
         setSearch,
@@ -27,7 +30,7 @@ const BlogManagement = ({ blogs }: { blogs: Blog[] }) => {
         currentBlogs,
         totalPages,
         clearFilters,
-    } = useBlogFilters(blogs, 5);
+    } = useBlogFilters(allBlogs, 5);
 
     return (
         <Card>
@@ -42,8 +45,10 @@ const BlogManagement = ({ blogs }: { blogs: Blog[] }) => {
                         </p>
                     </div>
 
-                    <Button>
-                        <PlusIcon className="mr-1 h-4 w-4" /> Create Blog
+                    <Button asChild>
+                        <Link href={"/admin/dashboard/blogs/create"}>
+                            <PlusIcon className="mr-1 h-4 w-4" /> Create Blog
+                        </Link>
                     </Button>
                 </div>
             </CardHeader>
@@ -70,6 +75,7 @@ const BlogManagement = ({ blogs }: { blogs: Blog[] }) => {
                 <BlogTable
                     currentBlogs={currentBlogs}
                     filteredCount={filteredBlogs.length}
+                    setBlogs={setAllBlogs}
                 />
             </CardContent>
 

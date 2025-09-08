@@ -27,13 +27,32 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
 import { Blog } from "@/types/admin/blogs";
 import { Card } from "@/components/ui/card";
+import { blogs } from "@prisma/client";
+import axios from "axios";
+import { toast } from "sonner";
 
 type Props = {
     currentBlogs: Blog[];
     filteredCount: number;
+    setBlogs: React.Dispatch<React.SetStateAction<Blog[]>>; // add this
 };
 
-const BlogTable = ({ currentBlogs, filteredCount }: Props) => {
+const BlogTable = ({ currentBlogs, filteredCount, setBlogs }: Props) => {
+    async function handleDelete(blogId: string) {
+        try {
+            const res = await axios.delete(`/api/blogs/${blogId}`);
+            if (res.status === 200) {
+                toast.success("Blog deleted successfully.");
+                // 🔹 Optimistic update: remove the blog from UI immediately
+                setBlogs((prev) => prev.filter((b) => b.id !== blogId));
+            } else {
+                toast.error("Failed to delete the blog. Please try again.");
+            }
+        } catch {
+            toast.error("Failed to delete the blog. Please try again.");
+        }
+    }
+
     return (
         <Card className="p-0 border border-[#DDDDDD] dark:border-[#333333]">
             <Table className="w-full">
@@ -103,7 +122,12 @@ const BlogTable = ({ currentBlogs, filteredCount }: Props) => {
                                             <PencilIcon className="w-4 h-4" />{" "}
                                             Edit
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="flex items-center gap-2 text-destructive">
+                                        <DropdownMenuItem
+                                            className="flex items-center gap-2 text-destructive"
+                                            onClick={() =>
+                                                handleDelete(blog.id)
+                                            }
+                                        >
                                             <Trash2Icon className="w-4 h-4" />{" "}
                                             Delete
                                         </DropdownMenuItem>

@@ -15,6 +15,7 @@ const DashboardBlogsPage = async () => {
             updatedAt: true,
             _count: { select: { bloglikes: true } },
         },
+        orderBy: { createdAt: "desc" },
     });
 
     // reshape response
