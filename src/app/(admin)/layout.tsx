@@ -8,7 +8,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <AdminSidebar />
             <main className="h-screen w-full transition-all duration-300 ease-in-out">
                 <AdminHeader />
-                <section className="p-4">{children}</section>
+                <section className="p-4 bg-background">{children}</section>
             </main>
         </SidebarProvider>
     );
